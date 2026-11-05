@@ -1,0 +1,242 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHeader from "../../components/PageHeader.astro";
+import CtaBand from "../../components/CtaBand.astro";
+import Icon from "../../components/Icon.astro";
+import Portrait from "../../components/Portrait.astro";
+import Timeline from "../../components/Timeline.astro";
+import { careerPath, highlights } from "../../data/site-data";
+import { SITE_URL, projectUrl, SHOW_PRIVATE_LESSONS, BOOK_RELEASED } from "../../consts";
+import { book } from "../../data/site-data";
+
+const description =
+  "La storia di Federico Di Luca: da ingegnere delle telecomunicazioni a Technical Leader .NET, oggi docente di Informatica e sviluppatore freelance a Pesaro.";
+
+
+// Pagina "about" della persona descritta in home: Google la lega alla stessa entità
+// (@id) invece di trattarla come una scheda a sé per chi cerca il nome.
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  url: new URL("/chi-sono/", SITE_URL).toString(),
+  mainEntity: { "@id": `${SITE_URL}/#person` },
+};
+---
+
+<BaseLayout title="Chi sono" description={description} jsonLd={jsonLd}>
+  <PageHeader
+    eyebrow="Federico Di Luca · Pesaro"
+    title="Chi sono"
+    lead="Ingegnere, sviluppatore, docente. Mi piace capire come funzionano le cose, e da quando insegno ancora di più spiegarle."
+  >
+    <a class="btn btn-primary" href="/contatti/">Contattami</a>
+    <a class="btn btn-outline" href="/cv-federico-di-luca.pdf"><Icon name="download" /> Scarica il CV</a>
+
+    <Portrait slot="aside" />
+  </PageHeader>
+
+  <section class="section highlights-section">
+    <div class="container">
+      <ul class="highlights">
+        {highlights.map((h) => (
+          <li class="card highlight">
+            <Icon name={h.icon} badge class="highlight-icon" />
+            <div>
+              <p class="highlight-title">{h.title}</p>
+              <p class="highlight-text">{h.text}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section story-section">
+    <div class="container narrow">
+      <p>
+        Mi chiamo Federico Di Luca, sono di Pesaro e mi muovo tra due mondi che per me sono
+        complementari: lo sviluppo software e l'insegnamento.
+      </p>
+      <p>
+        Mi sono laureato con lode in Ingegneria Elettronica e delle Telecomunicazioni
+        all'Università di Bologna, dopo una laurea triennale in Ingegneria Biomedica e un periodo
+        di studio Erasmus alla Universitat Politècnica de Catalunya di Barcellona. Durante gli
+        studi ho contribuito a una ricerca sul rilevamento di persone tramite radar ultra-wideband,
+        pubblicata sulla rivista scientifica <a href="/pubblicazioni/">MDPI Sensors</a>.
+      </p>
+      <p>
+        Ho iniziato la carriera come Automation Developer in NGTEC, per poi crescere in Websolute
+        come Technical Leader, guidando team di sviluppo su progetti .NET per Brand, Marketing ed
+        E-commerce: progettazione di architetture software, gestione di progetti IT end-to-end e
+        mentoring di sviluppatori junior.
+      </p>
+      <p>
+        Dal 2024 insegno Informatica nella scuola superiore, prima al Liceo Scientifico G. Torelli e
+        oggi all'ISISS "P. Gobetti - A. De Gasperi". È un cambio di prospettiva che mi ha permesso di
+        riscoprire quanto mi piaccia spiegare, semplificare concetti complessi e trasmettere il
+        modo di pensare tipico di chi lavora con la tecnologia.
+      </p>
+
+      <blockquote class="pull-quote">
+        <p>Capire come funzionano le cose e spiegarle a qualcun altro.</p>
+      </blockquote>
+
+      <h2 class="story-title"><Icon name="team" /> Cosa porto dall'esperienza in azienda</h2>
+      <p>
+        Non è stata una fuga dal settore tecnico, ma un modo per unire due cose che per me sono
+        sempre state collegate: capire come funzionano le cose e spiegarle a qualcun altro.
+        Guidare un team di sviluppo significa anche spiegare, ogni giorno, scelte tecniche a
+        persone con background diversi: colleghi junior, referenti di progetto, clienti. È un
+        esercizio di comunicazione continuo, non troppo diverso da quello che serve in una classe.
+      </p>
+      <p>
+        Portare questa esperienza in aula mi permette di raccontare la programmazione non come una
+        materia astratta, ma come uno strumento che risolve problemi concreti, gli stessi che ho
+        affrontato su progetti reali.
+      </p>
+
+      <h2 class="story-title"><Icon name="code" /> Perché continuo anche a sviluppare</h2>
+      <p>
+        Oggi affianco all'insegnamento la disponibilità per collaborazioni a progetto: sviluppo
+        software, consulenza tecnica e formazione aziendale, principalmente nell'area tra Pesaro,
+        Fano, Urbino e Rimini, ma anche a distanza per progetti da tutta Italia.
+      </p>
+      <p>
+        Restare a contatto con progetti reali mi aiuta anche come docente: gli esempi che porto in
+        classe non sono mai troppo lontani da quello che succede davvero nel lavoro di uno
+        sviluppatore.
+      </p>
+      <p>
+        Nel tempo libero coltivo qualche progetto personale: <a href={projectUrl("vocabe")} target="_blank" rel="noopener noreferrer">Vocabe</a>,
+        un'app gratuita per imparare una parola italiana al giorno, e <a href={projectUrl("schoolfeedmonitor")} target="_blank" rel="noopener noreferrer">School Feed Monitor</a>,
+        un servizio per ricevere avvisi scolastici su Telegram. Gli altri sono nella pagina <a href="/progetti/">Progetti</a>.
+      </p>
+
+      {BOOK_RELEASED && (
+        <>
+          <h2 class="story-title"><Icon name="book" /> Il libro</h2>
+          <p>
+            In classe, quando arriva l'argomento ostico, prima provo a raccontare una storia. Col tempo
+            quelle storie sono diventate il mio primo libro: <a href="/libro/"><em>{book.title}</em></a>, 45 storie
+            vere della storia dell'informatica, ognuna con un cruciverba crittografato. Gli schemi li
+            genera un programma in Python che ho scritto apposta, e che controlla che ognuno abbia una
+            sola soluzione.
+          </p>
+        </>
+      )}
+    </div>
+  </section>
+
+  <section class="section section-alt" id="percorso">
+    <div class="container">
+      <h2 class="section-title">Percorso</h2>
+      <p class="section-lead">Dall'ingegneria allo sviluppo software, fino all'insegnamento.</p>
+      <Timeline items={careerPath} legend={{ work: "Lavoro", education: "Studi" }} />
+    </div>
+  </section>
+
+  <CtaBand
+    title="Parliamo del tuo progetto"
+    text={SHOW_PRIVATE_LESSONS
+      ? "Sviluppo software, formazione o lezioni private: scrivimi e troviamo insieme la forma di collaborazione giusta."
+      : "Sviluppo software, formazione o un corso su misura: scrivimi e troviamo insieme la forma di collaborazione giusta."}
+    primary={{ href: "/contatti/", label: "Contattami" }}
+    links={[
+      { href: "/servizi/sviluppo-software/", label: "Sviluppo software", icon: "code" },
+      { href: "/servizi/formazione/", label: "Formazione", icon: "board" },
+      ...(SHOW_PRIVATE_LESSONS ? [{ href: "/lezioni-private/", label: "Lezioni private", icon: "book" as const }] : []),
+    ]}
+  />
+</BaseLayout>
+
+<style>
+  .highlights-section {
+    padding-bottom: 0;
+  }
+
+  .highlights {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .highlight {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1.5rem;
+  }
+
+  .highlight-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0 0 0.35rem;
+  }
+
+  .highlight-text {
+    color: var(--color-text-muted);
+    font-size: 0.92rem;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .narrow {
+    max-width: 42rem;
+  }
+
+  .story-section p {
+    color: var(--color-text-muted);
+    font-size: 1.05rem;
+  }
+
+  .story-title {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    font-size: 1.35rem;
+    margin: 2.75rem 0 1rem;
+  }
+
+  .pull-quote {
+    position: relative;
+    margin: 2.75rem 0;
+    padding: 1.5rem 1.75rem;
+    border-left: 3px solid transparent;
+    border-image: var(--gradient-brand) 1;
+    background: linear-gradient(90deg, color-mix(in srgb, var(--color-accent-3) 12%, transparent), transparent);
+  }
+
+  .story-section .pull-quote p {
+    margin: 0;
+    color: var(--color-text);
+    font-size: clamp(1.3rem, 2.5vw, 1.6rem);
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .section-alt {
+    background: var(--color-bg-alt);
+  }
+
+
+  @media (max-width: 960px) {
+    .highlights {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+
+  @media (max-width: 520px) {
+    .highlights {
+      grid-template-columns: 1fr;
+    }
+
+    .highlight {
+      flex-direction: row;
+      align-items: flex-start;
+    }
+  }
+</style>

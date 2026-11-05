@@ -1,0 +1,9 @@
+Ciao! Per i colleghi: ho fatto ProfClick, un'app gratuita per tenere l'anno scolastico sotto controllo.
+
+Metti l'orario e il programma delle classi e ti ricava tutte le lezioni, ti propone dove mettere verifiche e interrogazioni per avere i voti che servono, e ogni settimana ti dice cosa fare (e se una lezione salta, il piano slitta da solo).
+Ci sono anche le riunioni (consigli, scrutini, GLO) con le cose da preparare, gli argomenti già pronti da incollare sul registro, e Google Calendar.
+Funziona dal browser (si può installare) e non salva nessun dato degli studenti.
+
+👉 https://profclick.federicodiluca.com
+
+Fammi sapere cosa non funziona!

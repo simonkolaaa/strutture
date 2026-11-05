@@ -1,0 +1,42 @@
+from app.db import get_db
+
+
+def get_all_channels():
+    """
+    Recupera tutti i canali.
+    """
+    db = get_db()
+    query = """
+        SELECT canali.id, canali.nome, canali.numero_iscritti, categoria.nome AS categoria
+        FROM canali
+        JOIN categoria ON canali.categoria_id = categoria.id
+        ORDER BY numero_iscritti DESC
+    """
+    channels = db.execute(query).fetchall()
+    return [dict(channel) for channel in channels]
+
+
+def get_channel_by_id(channel_id):
+    """Recupera un singolo canale per ID."""
+    db = get_db()
+    query = """
+        SELECT c.id, c.nome, c.numero_iscritti, ca.nome AS categoria
+        FROM canali c
+        JOIN categoria ca ON c.categoria_id = ca.id
+        WHERE c.id = ?
+    """
+    channel = db.execute(query, (channel_id,)).fetchone()
+    if channel:
+        return dict(channel)
+    return None
+
+
+
+def create_channel(nome, numero_iscritti, categoria_id):
+    """Crea un nuovo canale."""
+    db = get_db()
+    cursor = db.execute(
+        "INSERT INTO canali (nome, numero_iscritti, categoria_id) VALUES (?, ?, ?)", (nome, numero_iscritti, categoria_id)
+    )
+    db.commit()
+    return cursor.lastrowid

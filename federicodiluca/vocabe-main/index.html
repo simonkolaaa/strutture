@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#faf7f2" />
+
+    <title>Vocabe — impara una parola italiana al giorno</title>
+    <meta
+      name="description"
+      content="Vocabe ti fa scoprire ogni giorno una parola italiana ricercata: significato, esempi d'uso, etimologia e un ripasso per non dimenticarla. Gratis, senza registrazione, funziona offline."
+    />
+    <meta
+      name="keywords"
+      content="parola del giorno, vocabolario italiano, imparare parole italiane, significato parole, etimologia, lessico, migliorare il vocabolario, italiano"
+    />
+    <meta name="author" content="Federico Di Luca" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <link rel="canonical" href="https://vocabe.federicodiluca.com/" />
+
+    <meta property="og:site_name" content="Vocabe" />
+    <meta property="og:title" content="Vocabe — impara una parola italiana al giorno" />
+    <meta
+      property="og:description"
+      content="Ogni giorno una parola italiana ricercata: significato, esempi, etimologia e ripasso. Gratis e offline."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="it_IT" />
+    <meta property="og:url" content="https://vocabe.federicodiluca.com/" />
+    <meta property="og:image" content="https://vocabe.federicodiluca.com/social-share.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Vocabe — impara una parola italiana al giorno" />
+    <meta
+      name="twitter:description"
+      content="Ogni giorno una parola italiana ricercata: significato, esempi, etimologia e ripasso."
+    />
+    <meta name="twitter:image" content="https://vocabe.federicodiluca.com/social-share.png" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Vocabe",
+        "url": "https://vocabe.federicodiluca.com/",
+        "description": "Impara una parola italiana al giorno: significato, esempi d'uso, etimologia e ripasso. Gratis, senza registrazione, funziona offline.",
+        "applicationCategory": "EducationApplication",
+        "operatingSystem": "Web",
+        "inLanguage": "it-IT",
+        "isAccessibleForFree": true,
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" },
+        "author": { "@type": "Person", "@id": "https://federicodiluca.com/#person", "name": "Federico Di Luca", "url": "https://federicodiluca.com/" }
+      }
+    </script>
+
+    <script>
+      // Restores the route a 404.html redirect encoded (GitHub Pages has no
+      // server-side rewrites for a SPA). See public/404.html.
+      ;(function (l) {
+        if (l.search[1] === '/') {
+          var decoded = l.search
+            .slice(1)
+            .split('&')
+            .map(function (s) {
+              return s.replace(/~and~/g, '&')
+            })
+            .join('?')
+          window.history.replaceState(null, '', l.pathname.slice(0, -1) + decoded + l.hash)
+        }
+      })(window.location)
+    </script>
+  </head>
+  <body>
+    <div id="root">
+      <!-- Static fallback: real content for crawlers and no-JS visitors, replaced on hydration. -->
+      <main style="max-width: 42rem; margin: 0 auto; padding: 2rem 1.25rem; font-family: Georgia, serif">
+        <h1 style="font-size: 1.9rem; margin: 0 0 0.5rem">Vocabe — una parola italiana al giorno</h1>
+        <p style="color: #57534e; line-height: 1.6">
+          Vocabe ti fa scoprire ogni giorno una parola italiana ricercata, con il suo
+          <strong>significato</strong>, <strong>esempi d'uso</strong>, <strong>etimologia</strong> e una
+          curiosità. Il giorno dopo un piccolo quiz ti aiuta a fissarla nella memoria. È gratis, non
+          serve registrarsi e funziona anche offline.
+        </p>
+        <p style="color: #57534e; line-height: 1.6">
+          Sfoglia tutte le parole nel
+          <a href="parole/" style="color: #b45309">glossario di Vocabe</a>.
+        </p>
+        <noscript>
+          <p style="color: #b91c1c">
+            Per usare Vocabe serve JavaScript. Puoi comunque consultare il
+            <a href="parole/">glossario completo delle parole</a>.
+          </p>
+        </noscript>
+      </main>
+    </div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

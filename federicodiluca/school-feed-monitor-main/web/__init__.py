@@ -1,0 +1,160 @@
+"""School Feed Monitor — layer web (Flask, server-side rendering).
+
+Sito pubblico senza account: mostra le notizie raccolte, le filtra con le preferenze
+salvate nel browser di chi visita e genera la configurazione per il bot Telegram.
+Processo separato dal bot, stesso database SQLite (WAL).
+
+Configurazione via ambiente / .env:
+    SECRET_KEY              chiave per firmare il cookie di sessione (solo token CSRF)
+    APP_BASE_URL            URL pubblico (canonical, sitemap)
+    FLASK_DEBUG             1 per il server di sviluppo
+    TELEGRAM_BOT_USERNAME   username del bot (senza @) per i link "apri il bot"
+    CONTACT_EMAIL           email pubblica di contatto (pagina Chi siamo, privacy)
+"""
+import hashlib
+import os
+import secrets
+from functools import lru_cache
+
+from flask import Flask, render_template, request
+
+from sfm.config_loader import get_config
+from sfm.db import init_db
+from sfm.db_news import search_news
+from sfm.db_sources import sync_config_sources
+from sfm.env import env, env_bool
+from sfm.utils import format_local_datetime, slugify, strip_html
+from web import freshness, prefs, seo, security
+from web.configurator import bp as config_bp, telegram_link
+from web.news import bp as news_bp, region_url, regions_with_sources, source_url
+
+APP_NAME = "School Feed Monitor"
+PRIVACY_VERSION = "2026-09-25"
+
+_GIORNI = ["lunedì", "martedì", "mercoledì", "giovedì", "venerdì", "sabato", "domenica"]
+_MESI = ["gennaio", "febbraio", "marzo", "aprile", "maggio", "giugno", "luglio", "agosto",
+         "settembre", "ottobre", "novembre", "dicembre"]
+
+
+def giorno_it(d):
+    """date -> 'Sabato 13 settembre 2026' (senza dipendere dal locale del server)."""
+    return f"{_GIORNI[d.weekday()].capitalize()} {d.day} {_MESI[d.month - 1]} {d.year}"
+
+
+class SiteFlask(Flask):
+    """Sul sito statico gli URL delle pagine finiscono con la barra (vedi seo.page_path).
+    Passa da qui sia url_for nei template sia quello chiamato dal codice Python."""
+
+    def url_for(self, endpoint, *args, **values):
+        url = super().url_for(endpoint, *args, **values)
+        return seo.page_path(url) if self.config.get("STATIC") else url
+
+
+@lru_cache(maxsize=64)
+def _asset_version(path, _mtime):
+    """Impronta corta del contenuto di un file statico (la data di modifica fa da chiave della cache)."""
+    with open(path, "rb") as f:
+        return hashlib.sha256(f.read()).hexdigest()[:10]
+
+
+def create_app(test_config=None):
+    app = SiteFlask(__name__, template_folder="templates", static_folder="static")
+
+    secret = env("SECRET_KEY")
+    debug = env_bool("FLASK_DEBUG", False)
+    if not secret:
+        if not debug and not test_config:
+            raise RuntimeError("SECRET_KEY mancante: impostala in .env "
+                               "(es. `python -c \"import secrets; print(secrets.token_hex(32))\"`)")
+        secret = secrets.token_hex(32)  # solo sviluppo/test
+
+    app.config.update(
+        SECRET_KEY=secret,
+        APP_NAME=APP_NAME,
+        PRIVACY_VERSION=PRIVACY_VERSION,
+        BASE_URL=(env("APP_BASE_URL") or "").rstrip("/"),
+        SESSION_COOKIE_HTTPONLY=True,
+        SESSION_COOKIE_SAMESITE="Lax",
+        SESSION_COOKIE_SECURE=(env("APP_BASE_URL") or "").startswith("https://"),
+        MAX_CONTENT_LENGTH=64 * 1024,
+        TELEGRAM_BOT_USERNAME=(env("TELEGRAM_BOT_USERNAME") or "").lstrip("@"),
+        CONTACT_EMAIL=env("CONTACT_EMAIL") or "schoolfeedmonitor@federicodiluca.com",
+        # True quando le pagine vengono congelate per GitHub Pages: niente POST né
+        # query string, l'interazione passa tutta da static/app.js (vedi scripts/build_site.py)
+        STATIC=False,
+    )
+    if test_config:
+        app.config.update(test_config)
+
+    init_db()
+    # Le fonti di config.json + catalogo vivono nel DB: le allinea anche il web, così il
+    # sito funziona anche se il bot non è ancora partito (idempotente, come in main.py).
+    sync_config_sources(get_config()["sites"])
+    security.init_app(app)
+    seo.init_app(app)
+    app.register_blueprint(news_bp)
+    app.register_blueprint(config_bp)
+    app.jinja_env.filters["local_datetime"] = lambda v: format_local_datetime(v, "%d/%m/%Y %H:%M")
+    app.jinja_env.filters["preview"] = lambda v, n=220: (lambda t: t[:n].rsplit(" ", 1)[0] + "…" if len(t) > n else t)(strip_html(v or ""))
+    app.jinja_env.filters["giorno_it"] = giorno_it
+    app.jinja_env.filters["slugify"] = slugify
+    app.jinja_env.globals["source_url"] = source_url
+    app.jinja_env.globals["region_url"] = region_url
+    app.jinja_env.globals["absolute_url"] = seo.absolute_url
+
+    @app.get("/")
+    def index():
+        latest, _ = search_news(days=7, page=1, per_page=5)
+        return render_template("index.html", latest=latest, regions=regions_with_sources())
+
+    @app.get("/sw.js")
+    def service_worker():
+        resp = app.send_static_file("sw.js")
+        resp.headers["Service-Worker-Allowed"] = "/"
+        resp.headers["Cache-Control"] = "no-cache"
+        return resp
+
+    @app.get("/privacy")
+    def privacy():
+        return render_template("privacy.html")
+
+    @app.get("/termini")
+    def terms():
+        return render_template("termini.html")
+
+    @app.get("/chi-siamo")
+    def about():
+        return render_template("chi_siamo.html")
+
+    @app.errorhandler(404)
+    def not_found(_e):
+        return render_template("errore.html", code=404, message="Pagina non trovata."), 404
+
+    @app.errorhandler(403)
+    def forbidden(_e):
+        return render_template("errore.html", code=403, message="Richiesta non valida o scaduta: ricarica la pagina e riprova."), 403
+
+    # CSS e JS hanno nell'indirizzo un'impronta del contenuto (?v=...): GitHub Pages li fa
+    # tenere in cache 10 minuti, e dopo una pubblicazione la pagina nuova arrivava col CSS
+    # vecchio. L'impronta cambia solo se cambia il file, quindi la cache resta utile.
+    @app.url_defaults
+    def static_version(endpoint, values):
+        name = values.get("filename") or ""
+        if endpoint == "static" and name.endswith((".css", ".js")) and "v" not in values:
+            path = os.path.join(app.static_folder, name)
+            if os.path.isfile(path):
+                values["v"] = _asset_version(path, os.path.getmtime(path))
+
+    @app.context_processor
+    def inject_globals():
+        return {"app_name": APP_NAME, "canonical": seo.canonical_url(request),
+                "static_mode": app.config.get("STATIC", False),
+                "base_path": request.script_root or "",
+                "bot_username": app.config.get("TELEGRAM_BOT_USERNAME", ""),
+                "contact_email": app.config.get("CONTACT_EMAIL", ""),
+                "telegram_link": telegram_link,
+                "freshness": freshness.freshness(),
+                "has_prefs": prefs.has_preferences(),
+                "n_prefs_sources": len(prefs.selected_source_ids())}
+
+    return app

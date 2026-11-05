@@ -1,0 +1,34 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# Data and logs
+data/
+logs/
+
+# Config (utente)
+config.json
+
+# Docker
+*.pid
+*.log
+*.sock
+
+# Configs
+sfm/config.json
+.env
+
+# macOS & misc
+.DS_Store
+.idea/
+.vscode/
+.claude/
+# prove del sito in jsdom
+node_modules/
+package-lock.json

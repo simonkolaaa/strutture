@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Vocabe</title>
+    <script>
+      // Single Page Apps for GitHub Pages — redirects a deep-linked or refreshed
+      // route (e.g. /ripasso) to the app root, encoding the path so
+      // index.html can restore it via history.replaceState.
+      // https://github.com/rafgraph/spa-github-pages
+      var pathSegmentsToKeep = 0 // custom domain: app at the root
+      var l = window.location
+      l.replace(
+        l.protocol +
+          '//' +
+          l.hostname +
+          (l.port ? ':' + l.port : '') +
+          l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') +
+          '/?/' +
+          l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
+          (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
+          l.hash,
+      )
+    </script>
+  </head>
+  <body></body>
+</html>

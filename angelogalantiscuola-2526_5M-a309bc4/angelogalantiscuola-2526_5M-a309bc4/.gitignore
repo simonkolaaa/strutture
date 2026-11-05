@@ -1,0 +1,7 @@
+.venv/
+# File delle soluzioni degli esercizi
+_temp/
+*.pyc
+repomix*
+_corr*/
+5m_v6/

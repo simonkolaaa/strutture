@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="it"{% if has_prefs %} class="has-prefs"{% endif %}>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ app_name }}{% endblock %}</title>
+  <meta name="description" content="{% block description %}Le notizie di Ministero, USR e USP raccolte da oltre cento siti e filtrate per le fonti e le parole chiave che scegli. Senza registrazione, anche su Telegram.{% endblock %}">
+  <link rel="canonical" href="{{ canonical }}">
+  <meta name="author" content="Federico Di Luca">
+  {% block robots %}{% endblock %}
+  <meta property="og:site_name" content="{{ app_name }}">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{{ self.title() }}">
+  <meta property="og:description" content="{{ self.description() }}">
+  <meta property="og:url" content="{{ canonical }}">
+  <meta property="og:locale" content="it_IT">
+  <meta property="og:image" content="{{ absolute_url(url_for('static', filename='og-image.png')) }}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="{{ app_name }}: le notizie di Ministero, USR e USP filtrate per le fonti e le parole che scegli">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#1e3a8a" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
+  <link rel="icon" href="{{ url_for('static', filename='favicon-16x16.png') }}" type="image/png" sizes="16x16">
+  <link rel="icon" href="{{ url_for('static', filename='favicon-32x32.png') }}" type="image/png" sizes="32x32">
+  <link rel="apple-touch-icon" href="{{ url_for('static', filename='apple-touch-icon.png') }}">
+  <link rel="mask-icon" href="{{ url_for('static', filename='mask-icon.svg') }}" color="#1e3a8a">
+  <link rel="manifest" href="{{ url_for('static', filename='site.webmanifest') }}">
+  {% block jsonld %}{% endblock %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <script src="{{ url_for('static', filename='theme.js') }}"></script>
+  <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</head>
+<body data-base="{{ base_path }}"{% if static_mode %} data-static="1" data-bot="{{ bot_username }}"{% endif %}>
+  <a class="skip" href="#main">Vai al contenuto</a>
+  <header class="site-header">
+    <nav aria-label="Principale">
+      <a class="brand" href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='favicon.svg') }}" alt="" width="28" height="28" class="brand-logo">{{ app_name }}</a>
+      {% set here = request.endpoint %}
+      <ul class="nav-pages">
+        <li><a href="{{ url_for('news.index') }}"{% if here in ('news.index', 'news.by_source') %} aria-current="page"{% endif %}>Notizie</a></li>
+        {% if has_prefs or static_mode %}<li id="nav-mine" class="nav-mine"><a href="{{ url_for('news.mine') }}"{% if here == 'news.mine' %} aria-current="page"{% endif %}>Le mie notizie</a></li>{% endif %}
+        <li><a href="{{ url_for('news.interpelli') }}"{% if here == 'news.interpelli' %} aria-current="page"{% endif %}>Interpelli</a></li>
+        <li><a href="{{ url_for('news.sources') }}"{% if here in ('news.sources', 'news.by_region') %} aria-current="page"{% endif %}>Fonti</a></li>
+        <li class="nav-cta"><a class="button primary" href="{{ url_for('config.show') }}"><span id="nav-config-label"><span class="label-prefs">Le mie fonti</span><span class="label-noprefs">Scegli le fonti</span></span></a></li>
+      </ul>
+      <ul class="nav-actions">
+        <li id="nav-install" hidden><button type="button" id="install-btn" class="link install-btn" aria-label="Installa">{% from "_icons.html" import icon %}{{ icon('download', 18) }} <span class="install-label">Installa</span></button></li>
+        <li><button type="button" id="theme-toggle" class="icon" aria-label="Cambia tema chiaro/scuro" title="Tema chiaro/scuro"><span class="only-light">{{ icon('moon', 18) }}</span><span class="only-dark">{{ icon('sun', 18) }}</span></button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <dialog id="install-help" class="install-help" aria-labelledby="install-help-title">
+    <h2 id="install-help-title">Installa {{ app_name }}</h2>
+    <p>Su iPhone e iPad si installa da Safari, in due tocchi:</p>
+    <ol>
+      <li>tocca <strong>Condividi</strong> (il quadrato con la freccia verso l'alto);</li>
+      <li>scegli <strong>Aggiungi alla schermata Home</strong>.</li>
+    </ol>
+    <p class="muted">Troverai l'icona tra le app, e il sito si aprirà a tutto schermo.</p>
+    <form method="dialog"><button class="button primary">Ho capito</button></form>
+  </dialog>
+
+  <main id="main" class="container">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <ul class="flashes" role="status">
+          {% for category, message in messages %}<li class="flash {{ category }}">{{ message }}</li>{% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    <div class="inner">
+      <nav aria-label="Footer">
+        <a href="{{ url_for('news.index') }}">Notizie</a>
+        <a href="{{ url_for('news.interpelli') }}">Interpelli</a>
+        <a href="{{ url_for('news.sources') }}">Fonti</a>
+        <a href="{{ url_for('about') }}">Chi siamo e contatti</a>
+        <a href="{{ url_for('privacy') }}">Privacy</a>
+        <a href="{{ url_for('terms') }}">Termini</a>
+        <a href="https://github.com/federicodiluca/school-feed-monitor" rel="noopener">Codice sorgente (AGPL-3.0)</a>
+        <a id="share-story" href="{{ url_for('static', filename='story.png') }}" download="school-feed-monitor.png"
+           title="Immagine per le storie di Instagram, con il link al sito">Condividi</a>
+      </nav>
+      {% from "_profclick.html" import profclick_footer %}{{ profclick_footer() }}
+      {% block footer_freshness %}{% include "_freshness.html" %}{% endblock %}
+      <p>{{ app_name }} è un progetto indipendente, non affiliato al Ministero dell'Istruzione e del Merito né agli Uffici Scolastici.
+        Aggrega notizie pubbliche senza garanzia di completezza o tempestività: fa fede sempre la fonte originale
+        (<a href="{{ url_for('terms') }}#responsabilita">esclusione di responsabilità</a>).</p>
+      <p>
+        Creato da <a href="https://federicodiluca.com/" rel="author noopener" target="_blank">Federico Di Luca</a> ·
+        <a href="https://federicodiluca.com/progetti/" rel="noopener" target="_blank">Guarda i miei altri progetti</a>
+      </p>
+    </div>
+  </footer>
+</body>
+</html>

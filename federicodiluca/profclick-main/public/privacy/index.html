@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="author" content="Federico Di Luca" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Privacy · ProfClick</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #f7faf8;
+        --text: #1f302c;
+        --muted: #5a6b66;
+        --line: #dce6e1;
+        --accent: #2f5b4f;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #1c2a27;
+          --text: #eef4f1;
+          --muted: #a9bab4;
+          --line: #2e403b;
+          --accent: #9fd4bf;
+        }
+      }
+      body {
+        margin: 0;
+        padding: 2.5rem 1rem 4rem;
+        background: var(--bg);
+        color: var(--text);
+        font: 16px/1.65 system-ui, -apple-system, 'Segoe UI', sans-serif;
+      }
+      main {
+        max-width: 42rem;
+        margin: 0 auto;
+      }
+      header {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 2rem;
+      }
+      header img {
+        width: 2.5rem;
+        height: 2.5rem;
+      }
+      h1 {
+        font-size: 1.75rem;
+        line-height: 1.2;
+        margin: 0;
+        text-wrap: balance;
+      }
+      h2 {
+        font-size: 1.15rem;
+        margin: 2.25rem 0 0.5rem;
+      }
+      p,
+      li {
+        color: var(--text);
+      }
+      .muted {
+        color: var(--muted);
+      }
+      a {
+        color: var(--accent);
+        text-underline-offset: 3px;
+      }
+      ul {
+        padding-left: 1.25rem;
+      }
+      li + li {
+        margin-top: 0.35rem;
+      }
+      code {
+        font-size: 0.92em;
+      }
+      footer {
+        margin-top: 3rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid var(--line);
+        font-size: 0.9rem;
+        color: var(--muted);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header>
+        <img src="/favicon.svg" alt="" />
+        <div>
+          <h1>Informativa sulla privacy di ProfClick</h1>
+          <p class="muted" style="margin: 0.25rem 0 0">Ultimo aggiornamento: 2 ottobre 2026</p>
+        </div>
+      </header>
+
+      <p>
+        ProfClick è un’applicazione web per pianificare le lezioni: programma, piano settimanale e valutazioni delle proprie
+        classi. Questa pagina spiega quali dati usa, dove li tiene e come cancellarli.
+      </p>
+
+      <h2>In breve</h2>
+      <ul>
+        <li>ProfClick non ha un server: funziona interamente nel tuo browser.</li>
+        <li>I tuoi dati stanno sul tuo dispositivo e, se lo scegli, sul tuo Google Drive. Chi ha realizzato ProfClick non li vede e non li riceve.</li>
+        <li>ProfClick non contiene nomi né voti degli studenti: pianifica le attività della classe, non registra le valutazioni dei singoli.</li>
+        <li>Nessuna pubblicità, nessuna analisi statistica, nessun cookie di tracciamento.</li>
+      </ul>
+
+      <h2>Dati di Google a cui ProfClick accede</h2>
+      <p>
+        Collegare Google è facoltativo. Se lo fai, ProfClick chiede un solo permesso, il più ristretto disponibile:
+        <strong>i file creati da ProfClick sul tuo Google Drive</strong> (<code>drive.file</code>). Si tratta di un solo file,
+        <code>profclick-dati.json</code>, con classi, programma, piano delle lezioni e riunioni, per avere gli stessi dati su tutti i tuoi
+        dispositivi. ProfClick non può vedere gli altri file del tuo Drive.
+      </p>
+
+      <h2>Dove sono i dati</h2>
+      <ul>
+        <li><strong>Nel tuo browser</strong> (IndexedDB): i dati dell’app, per aprirla subito e usarla anche offline.</li>
+        <li><strong>Nel tuo Google Drive</strong>, se lo colleghi: il file <code>profclick-dati.json</code>, di tua proprietà.</li>
+        <li>
+          <strong>Il permesso di accesso a Google</strong> resta solo in memoria mentre l’app è aperta e scade dopo circa
+          un’ora. Non viene salvato da nessuna parte.
+        </li>
+      </ul>
+      <p>
+        Le richieste vanno direttamente dal tuo browser a Google. L’app è pubblicata su GitHub Pages, che come ogni servizio
+        di hosting può registrare dati tecnici delle visite (per esempio l’indirizzo IP) secondo la propria informativa.
+      </p>
+
+      <h2>Uso dei dati ricevuti dalle API di Google</h2>
+      <p>
+        L’uso e il trasferimento ad altre app delle informazioni ricevute dalle API di Google da parte di ProfClick rispettano
+        le
+        <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener"
+          >Norme sui dati utente dei servizi API di Google</a
+        >, inclusi i requisiti di uso limitato. Il file serve solo a sincronizzare i tuoi dispositivi: non viene letto da
+        nessuna persona, non viene venduto, non viene usato per pubblicità e non viene trasferito a terzi.
+      </p>
+      <p class="muted" lang="en">
+        ProfClick’s use and transfer to any other app of information received from Google APIs will adhere to the Google API
+        Services User Data Policy, including the Limited Use requirements.
+      </p>
+
+      <h2>Come cancellare i dati</h2>
+      <ul>
+        <li>Elimina il file <code>profclick-dati.json</code> dal tuo Google Drive.</li>
+        <li>Cancella i dati del sito <code>profclick.federicodiluca.com</code> dalle impostazioni del browser.</li>
+        <li>
+          Revoca l’accesso di ProfClick al tuo account dalla pagina
+          <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener">App di terze parti con accesso all’account</a>.
+        </li>
+      </ul>
+
+      <h2>Contatti</h2>
+      <p>
+        ProfClick è un progetto di <a href="https://federicodiluca.com/">Federico Di Luca</a>. Per domande su questa
+        informativa scrivi a <a href="mailto:profclick@federicodiluca.com">profclick@federicodiluca.com</a>. Il codice è
+        pubblico su <a href="https://github.com/federicodiluca/profclick">GitHub</a>.
+      </p>
+
+      <footer>
+        <a href="/">Torna a ProfClick</a> · Scopri gli <a href="https://federicodiluca.com/progetti/">altri progetti</a>
+      </footer>
+    </main>
+  </body>
+</html>

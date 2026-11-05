@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Pagina non trovata · ProfClick</title>
+    <!-- 404 servita da GitHub Pages per ogni indirizzo che non esiste. Pagina statica a sé:
+         percorsi assoluti, perché può comparire a qualunque profondità. -->
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #f7faf8;
+        --text: #1f302c;
+        --muted: #5a6b66;
+        --line: #dce6e1;
+        --accent: #2f5b4f;
+        --on-accent: #ffffff;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #1c2a27;
+          --text: #eef4f1;
+          --muted: #a9bab4;
+          --line: #2e403b;
+          --accent: #9fd4bf;
+          --on-accent: #1c2a27;
+        }
+      }
+      body {
+        margin: 0;
+        min-height: 100dvh;
+        display: grid;
+        place-items: center;
+        padding: 2rem 1rem;
+        box-sizing: border-box;
+        background: var(--bg);
+        color: var(--text);
+        font: 16px/1.65 system-ui, -apple-system, 'Segoe UI', sans-serif;
+        text-align: center;
+      }
+      main {
+        max-width: 30rem;
+      }
+      img {
+        width: 5rem;
+        height: 5rem;
+      }
+      .code {
+        margin: 1rem 0 0;
+        font-size: 0.85rem;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        color: var(--muted);
+      }
+      h1 {
+        font-size: 1.9rem;
+        line-height: 1.2;
+        margin: 0.25rem 0 1rem;
+        text-wrap: balance;
+      }
+      p {
+        margin: 0 0 1rem;
+        color: var(--muted);
+        text-wrap: pretty;
+      }
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.75rem;
+        margin-top: 1.75rem;
+      }
+      a.button {
+        display: inline-block;
+        padding: 0.7rem 1.2rem;
+        border-radius: 0.75rem;
+        font-weight: 600;
+        text-decoration: none;
+        border: 1px solid var(--line);
+        color: var(--text);
+      }
+      a.button.primary {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: var(--on-accent);
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <img src="/favicon.svg" alt="" />
+      <p class="code">Errore 404</p>
+      <h1>Assente</h1>
+      <p>Abbiamo fatto l'appello, ma questa pagina non ha risposto. Niente nota sul registro:
+        forse è stata spostata, o l'indirizzo ha un refuso.</p>
+      <p>Giustificazione accettata. Si torna in classe da qui.</p>
+      <div class="actions">
+        <a class="button primary" href="/">Torna a ProfClick</a>
+        <a class="button" href="https://federicodiluca.com/progetti/">Altri progetti</a>
+      </div>
+    </main>
+  </body>
+</html>

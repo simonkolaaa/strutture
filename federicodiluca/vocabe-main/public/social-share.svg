@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#1c1917" />
+  <g transform="translate(96,197) scale(0.56)">
+    <g fill="#fbbf24">
+      <path d="M160 116h78L268 330H250Z" />
+      <path d="M316 116h52L268 330H250Z" />
+      <rect x="130" y="100" width="122" height="18" />
+      <rect x="296" y="100" width="94" height="18" />
+    </g>
+    <rect x="196" y="360" width="120" height="14" rx="7" fill="#b45309" />
+  </g>
+  <text x="460" y="341" font-family="Georgia, 'Times New Roman', serif" font-size="104" fill="#faf7f2">Vocabe</text>
+  <text x="462" y="404" font-family="Georgia, 'Times New Roman', serif" font-size="34" fill="#d6d3d1">una parola italiana al giorno</text>
+</svg>

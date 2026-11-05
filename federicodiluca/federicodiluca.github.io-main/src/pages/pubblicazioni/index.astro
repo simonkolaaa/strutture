@@ -1,0 +1,76 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import PageHeader from "../../components/PageHeader.astro";
+import CtaBand from "../../components/CtaBand.astro";
+import { publications } from "../../data/site-data";
+import { SITE_URL } from "../../consts";
+
+const description =
+  "Pubblicazioni scientifiche di Federico Di Luca: ricerca su rilevamento umano tramite radar ultra-wideband e machine learning, pubblicata su MDPI Sensors.";
+
+const jsonLd = publications.map((pub) => ({
+  "@context": "https://schema.org",
+  "@type": "ScholarlyArticle",
+  headline: pub.title,
+  datePublished: pub.date,
+  isPartOf: { "@type": "Periodical", name: pub.journal },
+  url: pub.url,
+  author: { "@id": `${SITE_URL}/#person` },
+  abstract: pub.abstract,
+}));
+---
+
+<BaseLayout title="Pubblicazioni" description={description} jsonLd={jsonLd}>
+  <PageHeader
+    eyebrow="Ricerca universitaria"
+    title="Pubblicazioni scientifiche"
+    lead="Il lavoro di ricerca svolto durante il percorso universitario in Ingegneria delle Telecomunicazioni."
+    icons={["paper", "network", "chart"]}
+  />
+
+  <section class="section">
+    <div class="container narrow">
+      {publications.map((pub) => (
+        <article class="card publication">
+          <p class="publication-journal">{pub.journal} · {pub.date}</p>
+          <h2 class="publication-title">{pub.title}</h2>
+          <p class="publication-abstract">{pub.abstract}</p>
+          <a class="btn btn-outline" href={pub.url} target="_blank" rel="noopener noreferrer">
+            Leggi l'articolo completo
+          </a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <CtaBand
+    title="Vuoi sapere di più sul mio percorso?"
+    text="Dalla ricerca in università allo sviluppo software e all'insegnamento: la storia completa è nella pagina Chi sono."
+    primary={{ href: "/chi-sono/", label: "Chi sono" }}
+    secondary={{ href: "/cv-federico-di-luca.pdf", label: "Scarica il CV", icon: "download" }}
+  />
+</BaseLayout>
+
+<style>
+  .narrow {
+    max-width: 42rem;
+  }
+
+  .publication-journal {
+    color: var(--color-link);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin: 0 0 0.5rem;
+  }
+
+  .publication-title {
+    margin: 0 0 1rem;
+  }
+
+  .publication-abstract {
+    color: var(--color-text-muted);
+    margin: 0 0 1.5rem;
+  }
+</style>

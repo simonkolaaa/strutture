@@ -1,0 +1,10 @@
+log/
+.env
+current_ip.json
+current_ip.json.tmp
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+.pytest_cache/

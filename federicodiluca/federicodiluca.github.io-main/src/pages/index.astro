@@ -1,0 +1,326 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/Hero.astro";
+import Timeline from "../components/Timeline.astro";
+import SkillsGrid from "../components/SkillsGrid.astro";
+import ProjectCard from "../components/ProjectCard.astro";
+import Portrait from "../components/Portrait.astro";
+import CtaBand from "../components/CtaBand.astro";
+import BookBand from "../components/BookBand.astro";
+import Icon from "../components/Icon.astro";
+import { careerPath, highlights, publications, aboutMessages, homeProjects } from "../data/site-data";
+import { SITE_URL, SITE_NAME, AUTHOR, SHOW_PRIVATE_LESSONS } from "../consts";
+
+const description = SHOW_PRIVATE_LESSONS
+  ? "Sviluppatore software freelance (.NET, C#, Python) e docente di Informatica. Lezioni private, ripetizioni e formazione tecnica a Pesaro, Fano, Urbino, Rimini."
+  : "Sviluppatore software freelance (.NET, C#, Python) e docente di Informatica. Formazione tecnica e corsi su misura a Pesaro, Fano, Urbino, Rimini.";
+
+
+// La home è la pagina di riferimento per chi cerca il nome: il sito e il servizio
+// puntano alla stessa persona (@id) descritta nel layout.
+const personRef = { "@id": `${SITE_URL}/#person` };
+const jsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: SITE_NAME,
+    url: SITE_URL,
+    inLanguage: "it",
+    about: personRef,
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    name: `${AUTHOR.name} — Sviluppo Software & ${SHOW_PRIVATE_LESSONS ? "Lezioni Private" : "Formazione"}`,
+    url: SITE_URL,
+    image: new URL("/images/social-share.jpg", SITE_URL).toString(),
+    areaServed: AUTHOR.serviceArea,
+    founder: personRef,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: AUTHOR.city,
+      addressRegion: AUTHOR.region,
+      addressCountry: AUTHOR.country,
+    },
+  },
+];
+
+const services = [
+  {
+    href: "/servizi/sviluppo-software/",
+    icon: "code" as const,
+    title: "Sviluppo software",
+    text: "Applicazioni .NET e Python, integrazioni tra sistemi, automazione e supporto tecnico ai team di sviluppo.",
+    link: "Vedi i servizi",
+  },
+  {
+    href: "/servizi/formazione/",
+    icon: "board" as const,
+    title: "Formazione",
+    text: SHOW_PRIVATE_LESSONS
+      ? "Corsi di programmazione e informatica per aziende e scuole, dall'alfabetizzazione digitale alle tecnologie di sviluppo."
+      : "Corsi di programmazione e informatica per aziende e scuole. Ti serve un corso su misura? Parliamone.",
+    link: "Vedi i percorsi",
+  },
+  ...(SHOW_PRIVATE_LESSONS ? [{
+    href: "/lezioni-private/",
+    icon: "book" as const,
+    title: "Lezioni private",
+    text: "Ripetizioni di informatica, matematica e fisica per studenti di scuole medie, superiori e università, in presenza o online.",
+    link: "Come funzionano",
+  }] : []),
+];
+---
+
+<BaseLayout title={`${SITE_NAME} · Sviluppatore software e docente a Pesaro`} description={description} jsonLd={jsonLd}>
+  <Hero
+    eyebrow="Ciao, sono Federico Di Luca"
+    title="Sviluppatore Software & Docente di Informatica"
+    highlight="Docente di Informatica"
+    tagline={SHOW_PRIVATE_LESSONS
+      ? "Sviluppo software freelance, lezioni private, ripetizioni STEM e formazione tecnica per aziende, scuole e privati."
+      : "Sviluppo software freelance, consulenza e formazione tecnica per aziende, scuole e privati."}
+    primaryCta={{ href: "/contatti/", label: "Contattami", icon: "mail" }}
+    secondaryCta={{ href: "/cv-federico-di-luca.pdf", label: "Scarica il CV", icon: "download" }}
+  >
+    <Portrait slot="aside" />
+  </Hero>
+
+  <BookBand />
+
+  <section class="section" id="servizi" data-animate>
+    <div class="container">
+      <h2 class="section-title">Cosa faccio</h2>
+      <p class="section-lead">
+        {SHOW_PRIVATE_LESSONS ? "Tre" : "Due"} modi di lavorare insieme, tra le province di Pesaro-Urbino, Rimini o da remoto.
+      </p>
+      <div class="services-grid">
+        {services.map((s) => (
+          <a class="card service-card" href={s.href}>
+            <Icon name={s.icon} badge class="service-icon" />
+            <h3>{s.title}</h3>
+            <p>{s.text}</p>
+            <span class="service-link">{s.link} <Icon name="arrow" /></span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="progetti" data-animate>
+    <div class="container">
+      <h2 class="section-title">Progetti</h2>
+      <p class="section-lead">
+        Cose che ho costruito partendo da un bisogno reale, e che chiunque può usare o ispezionare:
+        il codice è pubblico.
+      </p>
+      {/* Al massimo tre card, una riga su desktop: gli altri progetti stanno su /progetti/. */}
+      <div class="projects-grid">
+        {homeProjects.slice(0, 3).map((project) => <ProjectCard {...project} compact />)}
+      </div>
+      <a class="btn btn-outline projects-more" href="/progetti/">Tutti i progetti <Icon name="arrow" /></a>
+    </div>
+  </section>
+
+  <section class="section" id="aboutme" data-animate>
+    <div class="container about-grid">
+      <div>
+        <h2 class="section-title">Chi sono</h2>
+        {aboutMessages.map((message) => (
+          <p class="about-text">{message}</p>
+        ))}
+        <p class="about-text">
+          {SHOW_PRIVATE_LESSONS && "Offro lezioni private di informatica, matematica e fisica a studenti di scuole medie, superiori e università. "}
+          {SHOW_PRIVATE_LESSONS ? "Dispongo anche" : "Dispongo"} di competenze in analisi di dati, machine learning e sviluppo di sistemi SCADA per automazione industriale.
+        </p>
+        <a class="btn btn-outline" href="/chi-sono/">Scopri di più su di me <Icon name="arrow" /></a>
+      </div>
+      <ul class="highlights">
+        {highlights.map((h) => (
+          <li class="card highlight">
+            <Icon name={h.icon} badge />
+            <p class="highlight-title">{h.title}</p>
+            <p class="highlight-text">{h.text}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section-alt" id="percorso" data-animate>
+    <div class="container">
+      <h2 class="section-title">Percorso</h2>
+      <p class="section-lead">Dall'ingegneria allo sviluppo software, fino all'insegnamento.</p>
+      <Timeline items={careerPath} legend={{ work: "Lavoro", education: "Studi" }} />
+    </div>
+  </section>
+
+  <section class="section" data-animate>
+    <div class="container">
+      <h2 class="section-title">Strumenti principali</h2>
+      <SkillsGrid />
+    </div>
+  </section>
+
+  <section class="section section-alt" data-animate>
+    <div class="container">
+      <h2 class="section-title">Pubblicazioni scientifiche</h2>
+      {publications.map((pub) => (
+        <a class="card publication-card" href={pub.url} target="_blank" rel="noopener noreferrer">
+          <p class="publication-journal"><Icon name="paper" /> {pub.journal} · {pub.date}</p>
+          <h3 class="publication-title">{pub.title}</h3>
+          <p class="publication-abstract">{pub.abstract}</p>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <CtaBand
+    title="Hai un progetto in mente?"
+    text="Sviluppo software, consulenza tecnica o formazione: scrivimi per parlarne."
+    primary={{ href: "/contatti/", label: "Contattami" }}
+    secondary={{ href: "/cv-federico-di-luca.pdf", label: "Scarica il CV", icon: "download" }}
+  />
+</BaseLayout>
+
+<style>
+  .about-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .about-text {
+    color: var(--color-text-muted);
+  }
+
+  .highlights {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .highlight {
+    padding: 1.35rem;
+  }
+
+  .highlight-title {
+    font-weight: 700;
+    margin: 0.9rem 0 0.3rem;
+  }
+
+  .highlight-text {
+    color: var(--color-text-muted);
+    font-size: 0.88rem;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .section-alt {
+    background: var(--color-bg-alt);
+  }
+
+  /* Tre colonne o una: con auto-fit, alle larghezze intermedie restava una card da sola sotto le altre due. */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (min-width: 68rem) {
+    .projects-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  .projects-more {
+    margin-top: 2rem;
+  }
+
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+    gap: 1.5rem;
+  }
+
+  .service-card {
+    display: flex;
+    flex-direction: column;
+    color: var(--color-text);
+  }
+
+  .service-card:hover {
+    text-decoration: none;
+    border-color: var(--color-link);
+  }
+
+  .service-icon {
+    margin-bottom: 1.25rem;
+  }
+
+  .service-card h3 {
+    margin: 0 0 0.6rem;
+    font-size: 1.15rem;
+  }
+
+  .service-card p {
+    color: var(--color-text-muted);
+    margin: 0 0 1.25rem;
+    flex-grow: 1;
+  }
+
+  .service-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--color-link);
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-top: auto;
+  }
+
+  .publication-card {
+    display: block;
+    color: var(--color-text);
+  }
+
+  .publication-card:hover {
+    text-decoration: none;
+    border-color: var(--color-link);
+  }
+
+  .publication-journal {
+    color: var(--color-link);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin: 0 0 0.5rem;
+  }
+
+  .publication-title {
+    margin: 0 0 0.75rem;
+    font-size: 1.15rem;
+  }
+
+  .publication-abstract {
+    color: var(--color-text-muted);
+    margin: 0;
+  }
+
+  @media (max-width: 900px) {
+    .about-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .highlights {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

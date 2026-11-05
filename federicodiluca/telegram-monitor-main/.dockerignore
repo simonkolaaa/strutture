@@ -1,0 +1,10 @@
+.git
+.venv
+.env
+log
+current_ip.json
+current_ip.json.tmp
+tests
+__pycache__
+*.pyc
+.pytest_cache

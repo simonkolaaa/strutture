@@ -1,0 +1,176 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import PageHeader from "../../../components/PageHeader.astro";
+import { AUTHOR } from "../../../consts";
+import Icon from "../../../components/Icon.astro";
+
+const description =
+  "Get in touch with Federico Di Luca for software development projects, technical consulting, or training programs.";
+
+// The mailto pre-fills subject and a message outline: the sender gets a structure to start from,
+// and the site itself never collects or forwards any data to third parties.
+const mailSubject = encodeURIComponent("Contact request from your website");
+const mailBody = encodeURIComponent(
+  "Hi Federico,\n\nI'm reaching out about: [software development / consulting / training]\n\nIn short:\n\n\nThanks,\n",
+);
+const mailHref = `mailto:${AUTHOR.email}?subject=${mailSubject}&body=${mailBody}`;
+---
+
+<BaseLayout title="Contact" description={description} locale="en">
+  <PageHeader
+    eyebrow="Pesaro, Italy · remote"
+    title="Get in Touch"
+    lead="Tell me about your project or training needs. I reply by email, usually within a couple of business days."
+    icons={["mail", "pin", "spark"]}
+  />
+
+  <section class="section">
+    <div class="container contact-grid">
+      <div class="card contact-main">
+        <Icon name="mail" badge class="contact-icon" />
+        <p class="contact-label">Write to</p>
+        <a class="contact-email" href={`mailto:${AUTHOR.email}`}>{AUTHOR.email}</a>
+        <p class="contact-hint">
+          Copy the address and write from your favourite email service. If you have a mail client
+          set up, the second button opens it with the subject and a message outline already filled in.
+        </p>
+        <div class="contact-actions">
+          <button class="btn btn-primary" type="button" data-copy-email={AUTHOR.email}>
+            Copy address
+          </button>
+          <a class="btn btn-outline" href={mailHref}>Open mail client</a>
+        </div>
+      </div>
+
+      <div class="card contact-side">
+        <h2 class="card-title">Other channels</h2>
+        <div class="contact-links">
+          <a href={AUTHOR.sameAs[1]} target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href={AUTHOR.sameAs[0]} target="_blank" rel="noopener noreferrer">GitHub</a>
+        </div>
+        <p class="contact-area">
+          <Icon name="pin" />
+          Based in Pesaro, Italy — available for remote projects worldwide.
+        </p>
+        <p class="contact-privacy">
+          <Icon name="shield" />
+          This site collects no data: when you write to me, your email stays in my inbox only.
+          <a href="/en/privacy/">Privacy notice</a>
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .contact-main {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .contact-icon {
+    margin-bottom: 0.75rem;
+  }
+
+  .contact-label {
+    margin: 0;
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .contact-email {
+    font-size: clamp(1.2rem, 3vw, 1.6rem);
+    font-weight: 700;
+    color: var(--color-text);
+    word-break: break-all;
+  }
+
+  .contact-hint {
+    color: var(--color-text-muted);
+    margin: 0.75rem 0 1rem;
+  }
+
+  .contact-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .contact-actions .btn {
+    font-family: inherit;
+    font-size: inherit;
+    cursor: pointer;
+  }
+
+  /* "Copied" state: the button itself becomes the confirmation, no toast or layout shift */
+  .contact-actions .btn[data-copied="true"] {
+    background: var(--color-accent-hover);
+    color: #fff;
+  }
+
+  .card-title {
+    margin-top: 0;
+  }
+
+  .contact-links {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .contact-area,
+  .contact-privacy {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+  }
+
+  .contact-privacy {
+    margin-bottom: 0;
+    padding-top: 1rem;
+    border-top: 1px solid var(--color-border);
+  }
+
+  @media (max-width: 780px) {
+    .contact-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
+
+<script>
+  // "Copy address" works everywhere, unlike mailto which needs a mail client configured
+  // in the browser (webmail-only users often don't have one).
+  document.querySelectorAll<HTMLButtonElement>("[data-copy-email]").forEach((btn) => {
+    const email = btn.dataset.copyEmail || "";
+    const label = btn.textContent;
+
+    btn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(email);
+        btn.textContent = "Copied!";
+        btn.dataset.copied = "true";
+      } catch {
+        // Clipboard unavailable (insecure context or permission denied):
+        // select the visible address so Ctrl+C is enough.
+        const link = document.querySelector(".contact-email");
+        if (link) window.getSelection()?.selectAllChildren(link);
+        btn.textContent = "Select and copy";
+      }
+      setTimeout(() => {
+        btn.textContent = label;
+        delete btn.dataset.copied;
+      }, 2200);
+    });
+  });
+</script>

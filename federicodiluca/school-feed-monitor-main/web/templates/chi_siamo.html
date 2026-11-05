@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% from "_icons.html" import icon %}
+{% block title %}Chi siamo e contatti — {{ app_name }}{% endblock %}
+{% block description %}{{ app_name }} è un progetto indipendente di un insegnante-sviluppatore: raccoglie le notizie di USR, USP e Ministero e le filtra per te. Chi lo fa, perché, e come contattarci.{% endblock %}
+{% block content %}
+<article class="prose">
+<h1>Chi siamo</h1>
+
+<p class="lead">{{ app_name }} è un progetto <strong>indipendente e senza scopo di lucro</strong>, nato da un bisogno concreto:
+smettere di aprire ogni giorno i siti dell'Ufficio Scolastico Provinciale, dell'USR e del Ministero per non perdersi
+graduatorie, convocazioni, trasferimenti e circolari.</p>
+
+<h2>Chi c'è dietro</h2>
+<p>Mi chiamo <strong>Federico Di Luca</strong>: insegno informatica e sviluppo software, tra Pesaro e Rimini.
+Come tanti colleghi ho sperimentato la fatica di stare dietro a decine di siti scolastici diversi, ognuno con la sua
+struttura e i suoi tempi: l'USP dove lavori, quello dove vorresti trasferirti, l'USR, il Ministero; graduatorie,
+bandi, utilizzazioni, assegnazioni, concorsi che aspetti da mesi. Da sviluppatore ho pensato che un programma potesse
+farlo al posto mio. Prima è nato un bot Telegram per me e per qualche collega, poi — visto che funzionava — questo
+sito, per chi Telegram non lo usa.</p>
+
+<h2>Per chi è</h2>
+<p>Per chiunque lavori nella scuola, di ruolo o no: chi vuole tenere d'occhio insieme la provincia dove insegna e
+quella dove punta al trasferimento, chi aspetta l'uscita di una graduatoria o di un bando, chi vuole solo sapere cosa
+pubblica il proprio USR senza doverlo cercare. Scegli le fonti e le parole chiave, e il resto arriva da solo.</p>
+<p>Il progetto lo porto avanti nel tempo libero. Se vuoi sapere altro su di me:
+<a href="https://federicodiluca.com/" rel="author noopener" target="_blank">federicodiluca.com</a>,
+dove trovi anche <a href="https://federicodiluca.com/progetti/" rel="noopener" target="_blank">gli altri miei progetti</a>.</p>
+
+<h2>Un altro strumento per chi insegna: ProfClick</h2>
+<p>L'altro strumento che ho fatto per i docenti è <a href="https://profclick.federicodiluca.com/" rel="noopener" target="_blank">ProfClick,
+il piano di lavoro del docente</a>. Metti l'orario e il programma delle tue classi: ricava tutte le lezioni dell'anno,
+festività e vacanze escluse, propone dove mettere spiegazioni e verifiche per avere i voti che servono in ogni periodo
+e ogni settimana ti dice cosa fare in ciascuna classe. Se una lezione salta, il piano slitta da solo.
+È gratis e senza registrazione, e i dati restano tuoi: sul tuo dispositivo e, se vuoi, sul tuo Google Drive.</p>
+
+<h2>Come funziona, in due righe</h2>
+<p>Il servizio legge a intervalli regolari i siti pubblici degli Uffici Scolastici Regionali e Provinciali e del
+Ministero (oltre 100 fonti, verificate una per una), salva i titoli e i link delle notizie e li confronta con le parole
+chiave e le fonti che scegli tu — sul sito senza registrarti, e su Telegram se vuoi essere avvisato. Non pubblica contenuti propri: ogni notizia rimanda alla pagina originale.
+Il codice è <a href="https://github.com/federicodiluca/school-feed-monitor" rel="noopener" target="_blank">pubblico
+(licenza AGPL-3.0)</a>: chiunque può leggerlo, verificarlo e proporre migliorie.</p>
+
+<h2>Cosa non è</h2>
+<ul>
+  <li>Non è un servizio del Ministero né degli Uffici Scolastici, e non è affiliato a nessun ente pubblico o sindacato.</li>
+  <li>Non è una fonte ufficiale: è un <em>aggregatore</em>. Fa sempre fede la pagina originale linkata in ogni notizia.</li>
+  <li>Non chiede registrazione, non vende dati, non fa profilazione: vedi la <a href="{{ url_for('privacy') }}">privacy</a>.</li>
+</ul>
+
+<h2 id="contatti">Contatti</h2>
+<p>Per segnalazioni (una fonte che manca o non funziona, un errore, un'idea), domande sul trattamento dei dati o
+qualsiasi altra cosa: <a href="mailto:{{ contact_email }}">{{ contact_email }}</a>.
+Le segnalazioni tecniche sono benvenute anche come
+<a href="https://github.com/federicodiluca/school-feed-monitor/issues" rel="noopener" target="_blank">issue su GitHub</a>.</p>
+<p class="muted">Rispondo quando posso: è un progetto gestito da una persona sola, fuori dall'orario di lavoro.</p>
+</article>
+{% endblock %}

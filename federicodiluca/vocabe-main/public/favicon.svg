@@ -1,0 +1,20 @@
+<!--
+  Vocabe's mark. The V is drawn as paths, not as <text>: an SVG that relies on a
+  font renders with whatever serif the viewer's system has, so the favicon would
+  not match the generated PNGs on Android or Linux.
+
+  Geometry (512 grid) is mirrored by the inline mark in src/ui/Logo.tsx — change
+  both together, then run `npm run icons:build`.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <rect width="512" height="512" fill="#1c1917" />
+  <g fill="#fbbf24">
+    <!-- thick left arm and thin right arm, meeting at a point -->
+    <path d="M160 116h78L268 330H250Z" />
+    <path d="M316 116h52L268 330H250Z" />
+    <!-- slab serifs across the top of each arm -->
+    <rect x="130" y="100" width="122" height="18" />
+    <rect x="296" y="100" width="94" height="18" />
+  </g>
+  <rect x="196" y="360" width="120" height="14" rx="7" fill="#b45309" />
+</svg>
